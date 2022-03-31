@@ -1,0 +1,34 @@
+SRC			= 	fractol.c
+
+LIB			=	ft
+
+LIB_DIR		=	libft/
+
+NAME		=	fract-ol
+
+OBJS		=	${SRC:.c=.o}
+
+CC			=	gcc
+
+CFLAGS		=	-Wall -Wextra -Werror
+
+RM			=	rm -f
+
+all:		$(NAME)
+
+#%.o: %.c
+#	$(CC) -Wall -Wextra -Werror -Imlx -c $< -o $@
+
+$(NAME):	$(OBJS)	
+			$(MAKE) -C $(LIB_DIR)
+			$(CC) $(CFLAGS) $(OBJS)-o $(NAME) -L $(LIB_DIR) -l$(LIB) -I$(LIB_DIR)libft.h
+			#$(CC) $(CFLAGS) $(OBJ) -Lmlx -lmlx -framework OpenGL -framework AppKit -o $(NAME) -L $(LIB_DIR) -l$(LIB) -I$(LIB_DIR)libft.h
+clean:
+			$(RM) $(OBJS)
+			$(MAKE) clean -C./libft
+
+fclean:		clean
+			$(MAKE) fclean -C./libft
+			$(RM) $(NAME)
+
+re:			fclean all
