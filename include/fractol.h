@@ -6,7 +6,7 @@
 /*   By: msoler-e <msoler-e@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 10:31:18 by msoler-e          #+#    #+#             */
-/*   Updated: 2022/03/29 13:11:59 by msoler-e         ###   ########.fr       */
+/*   Updated: 2022/03/31 13:14:19 by msoler-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FRACTOL_H
@@ -29,6 +29,8 @@ typedef struct	s_data{
 	int		endian;
 	int		size_x;
 	int		size_y;
+	double	c_im; //numeros complex imaginari equivalen a y
+	double	c_re;
 } t_data;
 
 void	ft_error(char *cnt, int error);
