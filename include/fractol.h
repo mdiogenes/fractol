@@ -6,7 +6,7 @@
 /*   By: msoler-e <msoler-e@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 10:31:18 by msoler-e          #+#    #+#             */
-/*   Updated: 2022/04/06 15:11:46 by msoler-e         ###   ########.fr       */
+/*   Updated: 2022/04/08 10:07:38 by msoler-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FRACTOL_H
@@ -33,8 +33,22 @@ typedef struct	s_data{
 	int		size_y;
 	double	c_im; //numeros complex imaginari equivalen a y
 	double	c_re;
+	double	MinRe;
+	double	MaxRe;
+	double	MinIm;
+	double	MaxIm;
+	int		maxitera;
+	int		red;
+	int		green;
+	int		blue;
+	double	zoom;
+	int		*posx;
+	int		*posy;
+	
 } t_data;
 
 void	ft_error(char *cnt, int error);
 void	ft_fractolmandel(t_data *tot);
+int		ft_hook(int keycode, t_data *tot);
+int		ft_mouse_handler(int mouscode, int x, int y, t_data *tot);
 #endif

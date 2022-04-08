@@ -6,7 +6,7 @@
 /*   By: msoler-e <msoler-e@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 12:56:48 by msoler-e          #+#    #+#             */
-/*   Updated: 2022/04/06 15:11:41 by msoler-e         ###   ########.fr       */
+/*   Updated: 2022/04/08 13:12:09 by msoler-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,44 +20,38 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 	*(unsigned int*)dst = color;
 }
 
-int	ft_calculate_color(int maxitera, int n)
+int	ft_calculate_color(int n, t_data *tot)
 {
-	int	color;
 	int	factor;
 	int	trans;
-	int red;
-	int  green;
-	int	blue;
+	int	color;
 
-	red = 0;
-	green = 0;
-	blue = 1;
 	color = 0;
-	if(n <= (maxitera / 2 -1) && (n >= 0))
+	if(n <= (tot->maxitera / 2 -1) && (n >= 0))
 	{
-		//de negre a vermell
-		factor = 255 / ((maxitera / 2) -1) ;
+		//de negre a vermell,verd o blau
+		factor = 255 / ((tot->maxitera / 2) -1) ;
 		color = n * factor;
-		trans = 50;
-		color = ((trans << 24) | ((color*red) << 16) | ((color*green) << 8) | (color*blue));
+		trans = 0;
+		color = ((trans << 24) | ((color * tot->red) << 16) | ((color * tot->green) << 8) | (color * tot->blue));
 	}
-	if(n >= (maxitera / 2) -10 && (n < maxitera))
+	if(n >= (tot->maxitera / 2)  && (n < tot->maxitera))
 	{
 		//vermell a blanc
-		factor = 255 / (maxitera - 1);
+		factor = 255 / (tot->maxitera - 1);
 		color = n * factor;
-		trans = 50;
-		if (red == 1)
+		trans = 0;
+		if (tot->red == 1)
 			color = ((trans << 24) | (255<< 16) | (color << 8) | (color));
-		if (blue == 1)
+		if (tot->blue == 1)
 			color = ((trans << 24) | (color<< 16) | (color << 8) | (255));
-		if (green == 1)
+		if (tot->green == 1)
 			color = ((trans << 24) | (color<< 16) | (255 << 8) | (color));
 	}
 	return (color);
 }
 
-int	ft_calculatemandel(t_data *tot, int maxitera)
+int	ft_calculatemandel(t_data *tot)
 {
 	double	Z_re;
 	double	Z_im;
@@ -70,7 +64,7 @@ int	ft_calculatemandel(t_data *tot, int maxitera)
 	Z_im = tot->c_im;
     isInside = 1;
    	n = 0;
-	while (n < maxitera)
+	while (n < tot->maxitera)
 	{
 		Z_im2 = Z_im * Z_im;
 		if((Z_re * Z_re) + Z_im2 > 4)
@@ -82,37 +76,33 @@ int	ft_calculatemandel(t_data *tot, int maxitera)
 		Z_re = (Z_re * Z_re) - Z_im2 + tot->c_re;
 		n ++;
 	}
-	color = ft_calculate_color(maxitera, n);
+	color = ft_calculate_color(n, tot);
 	return (color);
 }
 void	ft_fractolmandel(t_data *tot)
 {
-	//area a pintar
-	double 	MinRe = -2.0;
-	double 	MaxRe = 1.0; 
-	double 	MinIm = -1.2;
-	double	MaxIm = 1.186;
-	//double 	MaxIm = MinIm + (MaxRe-MinRe) * ((img->size_x) / (img->size_y)); 
-	int		maxitera;	
+	//double 	MaxIm = MinIm + (MaxRe-MinRe) * ((img->size_x) / (img->size_y)); 	
 	int 	y;
 	int		x;
 	int 	color;
 	//factor es el que multipliquem el numero n de maxitera per tenir un color mapejat
-	
-	maxitera =50;
 	y = 0;
 	while ( y < tot->size_y)
 	{
-	    tot->c_im = MaxIm - y * (MaxIm - MinIm) / (tot->size_y - 1);
+	    tot->c_im = tot->MaxIm - y * (tot->MaxIm - tot->MinIm) / (tot->size_y - 1);
 		x = 0;
 		while (x < tot->size_x)
 		{
-			tot->c_re = MinRe + x * (MaxRe - MinRe) / (tot->size_x - 1);
-			color = ft_calculatemandel(tot, maxitera);
+			tot->c_re = tot->MinRe + x * (tot->MaxRe - tot->MinRe) / (tot->size_x - 1);
+			color = ft_calculatemandel(tot);
 			my_mlx_pixel_put(tot, x, y, color);
 	 		x ++;
 		}
 		y ++;
 	}
-mlx_put_image_to_window(tot->mlx, tot->mlx_win, tot->img, 0, 0);
+	mlx_put_image_to_window(tot->mlx, tot->mlx_win, tot->img, 0, 0);
+	mlx_hook(tot->mlx_win, 4, 1L << 2, ft_mouse_handler, tot);
+	mlx_hook(tot->mlx_win, 5, 1L << 3, ft_mouse_handler, tot);
+	mlx_hook(tot->mlx_win, 2, 1L<<0, ft_hook, tot);
+	mlx_loop(tot->mlx);
 }
