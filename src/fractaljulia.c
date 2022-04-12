@@ -1,44 +1,54 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fractalmandelbrot.c                                :+:      :+:    :+:   */
+/*   fractaljulia.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: msoler-e <msoler-e@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/29 12:56:48 by msoler-e          #+#    #+#             */
-/*   Updated: 2022/04/12 09:23:08 by msoler-e         ###   ########.fr       */
+/*   Created: 2022/04/11 11:52:20 by msoler-e          #+#    #+#             */
+/*   Updated: 2022/04/12 12:42:21 by msoler-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/fractol.h"
 
-int	ft_calculatemandel(t_data *tot)
+int	ft_mouse_julia(t_data *tot, int x, int y)
+{
+	mlx_loop_hook(tot->mlx, ft_mouse_julia, tot);
+	mlx_mouse_get_pos(tot->mlx_win, &x, &y);
+	tot->crejulia = tot->minre + x * (tot->maxre - tot->minre)
+		/ (tot->size_x - 1);
+	tot->cimjulia = tot->maxim - y * (tot->maxim - tot->minim)
+		/ (tot->size_y - 1);
+	ft_fractaljulia(tot);
+	mlx_loop(tot->mlx);
+	return (0);
+}
+
+int	ft_calculatejulia(t_data *tot)
 {
 	double	z_re;
 	double	z_im;
-	double	z_im2;
-	int		isinside;
+	double	old_re;
+	double	old_im;
 	int		n;
 
 	z_re = tot->c_re;
 	z_im = tot->c_im;
-	isinside = 1;
 	n = 0;
 	while (n < tot->maxitera)
 	{
-		z_im2 = z_im * z_im;
-		if ((z_re * z_re) + z_im2 > 4)
-		{
-			isinside = 0;
+		old_re = z_re;
+		old_im = z_im;
+		z_re = old_re * old_re - old_im * old_im + tot->crejulia;
+		z_im = 2 * old_re * old_im + tot->cimjulia;
+		if ((z_re * z_re) + (z_im * z_im) > 2)
 			break ;
-		}
-		z_im = 2 * z_re * z_im + tot->c_im;
-		z_re = (z_re * z_re) - z_im2 + tot->c_re;
 		n ++;
 	}
-	return (ft_calculate_color(n, tot));
+	return (ft_calculate_color_crazy(n, tot));
 }
 
-void	ft_fractolmandel(t_data *tot)
+void	ft_fractaljulia(t_data *tot)
 {
 	int	y;
 	int	x;
@@ -53,7 +63,7 @@ void	ft_fractolmandel(t_data *tot)
 		{
 			tot->c_re = tot->minre + x * (tot->maxre - tot->minre)
 				/ (tot->size_x - 1);
-			my_mlx_pixel_put(tot, x, y, ft_calculatemandel(tot));
+			my_mlx_pixel_put(tot, x, y, ft_calculatejulia(tot));
 			x ++;
 		}
 		y ++;
