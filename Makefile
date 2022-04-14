@@ -6,7 +6,7 @@
 #    By: msoler-e <msoler-e@student.42barcel>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/28 11:03:19 by msoler-e          #+#    #+#              #
-#    Updated: 2022/04/11 13:18:05 by msoler-e         ###   ########.fr        #
+#    Updated: 2022/04/14 11:44:28 by msoler-e         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ LIBS_HEADERS := -I $(LIBS_DIR)/libft
 			
 INC := -I $(INCLUDE_DIR) $(LIBS_HEADERS)
 
-SRCS := fractol.c ft_error.c fractalmandelbrot.c hooks.c color.c fractaljulia.c marsu.c
+SRCS := fractol.c ft_error.c fractalmandelbrot.c hooks.c color.c fractaljulia.c  burnship.c
 
 OBJS = $(addprefix $(OBJS_DIR)/,$(SRCS:.c=.o))
 

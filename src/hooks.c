@@ -6,7 +6,7 @@
 /*   By: msoler-e <msoler-e@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 09:48:45 by msoler-e          #+#    #+#             */
-/*   Updated: 2022/04/12 12:42:18 by msoler-e         ###   ########.fr       */
+/*   Updated: 2022/04/14 11:43:52 by msoler-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/fractol.h"
@@ -38,18 +38,15 @@ void	ft_move(int keycode, t_data *tot)
 void	ft_itera(int keycode, t_data *tot)
 {
 	if (keycode == 69)
-		tot->maxitera = tot->maxitera + 1;
+		tot->maxitera = tot->maxitera + 10;
 	if (keycode == 78)
-		tot->maxitera = tot->maxitera - 1;
+		tot->maxitera = tot->maxitera - 10;
 }
 
 int	ft_hook(int keycode, t_data *tot)
 {
 	if (keycode == 53)
-	{
-		mlx_destroy_window(tot->mlx, tot->mlx_win);
-		exit(0);
-	}
+		ft_error("\n", 1, tot);
 	if ((keycode == 69) || (keycode == 78))
 		ft_itera(keycode, tot);
 	if (keycode == 18)
@@ -67,7 +64,7 @@ int	ft_hook(int keycode, t_data *tot)
 	if (tot->fractal == 2)
 		ft_fractaljulia(tot);
 	if (tot->fractal == 3)
-		ft_fractolmarsu(tot);
+		ft_fractolburnship(tot);
 	ft_fractolmandel(tot);
 	return (0);
 }
@@ -75,13 +72,23 @@ int	ft_hook(int keycode, t_data *tot)
 void	ft_loop_zoom(t_data *tot, int mouscode)
 {
 	if (mouscode == 4)
-		tot->zoom = tot->zoom - 0.01;
+	{
+		if (tot->zoom > 1)
+			tot->zoom = 1;
+		else
+			tot->zoom = tot->zoom - 0.01;
+	}
 	if (mouscode == 5)
-		tot->zoom = tot->zoom + 0.01;
+	{
+		if (tot->zoom < 1)
+			tot->zoom = 1;
+		else
+			tot->zoom = tot->zoom + 0.01;
+	}
 	if (tot->fractal == 2)
 		ft_fractaljulia(tot);
 	if (tot->fractal == 3)
-		ft_fractolmarsu(tot);
+		ft_fractolburnship(tot);
 	if (tot->fractal == 1)
 		ft_fractolmandel(tot);
 }
@@ -93,21 +100,24 @@ int	ft_mouse_handler(int mouscode, int x, int y, t_data *tot)
 	double	centim;
 	double	centre;
 
-	if (tot->fractal == 2 && mouscode == 1)
+	if (tot->fractal == 2 && mouscode == 1 && tot->freeze_julia == 0)
 		ft_mouse_julia(tot, x, y);
-	c_im = tot->maxim - y * (tot->maxim - tot->minim) / (tot->size_y - 1);
-	c_re = tot->minre + x * (tot->maxre - tot->minre) / (tot->size_x - 1);
-	tot->maxre = tot->maxre * tot->zoom;
-	tot->minre = tot->minre * tot->zoom;
-	tot->minim = tot->minim * tot->zoom;
-	tot->maxim = tot->minim + (tot->maxre - tot->minre)
-		* ((tot->size_x) / (tot->size_y));
-	centre = (tot->maxre - tot->minre) / 2;
-	centim = (tot->maxim - tot->minim) / 2;
-	tot->minre = c_re - centre;
-	tot->maxre = c_re + centre;
-	tot->maxim = c_im + centim;
-	tot->minim = c_im - centim;
-	ft_loop_zoom(tot, mouscode);
+	if (mouscode != 1)
+	{
+		c_im = tot->maxim - y * (tot->maxim - tot->minim) / (tot->size_y - 1);
+		c_re = tot->minre + x * (tot->maxre - tot->minre) / (tot->size_x - 1);
+		tot->maxre = tot->maxre * tot->zoom;
+		tot->minre = tot->minre * tot->zoom;
+		tot->minim = tot->minim * tot->zoom;
+		tot->maxim = tot->minim + (tot->maxre - tot->minre)
+			* ((tot->size_x) / (tot->size_y));
+		centre = (tot->maxre - tot->minre) / 2;
+		centim = (tot->maxim - tot->minim) / 2;
+		tot->minre = c_re - centre;
+		tot->maxre = c_re + centre;
+		tot->maxim = c_im + centim;
+		tot->minim = c_im - centim;
+		ft_loop_zoom(tot, mouscode);
+	}
 	return (0);
 }
