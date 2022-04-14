@@ -6,6 +6,7 @@ Opcions:
 mouse scroll:
 zoom in,out
 click per fixar julia
+i space per desfixar
 teclat:
 1,2,3 per canviar colors.
 +,- per aumentar, disminuir iteracions.
