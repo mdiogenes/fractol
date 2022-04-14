@@ -6,20 +6,21 @@
 /*   By: msoler-e <msoler-e@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 11:52:20 by msoler-e          #+#    #+#             */
-/*   Updated: 2022/04/14 11:34:53 by msoler-e         ###   ########.fr       */
+/*   Updated: 2022/04/14 15:40:17 by msoler-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/fractol.h"
 
 int	ft_mouse_julia(t_data *tot, int x, int y)
 {
-	tot->freeze_julia = 1;
-	mlx_loop_hook(tot->mlx, ft_mouse_julia, tot);
+	if (tot->freeze_julia == 1 || tot->freeze_julia == 0)
+		mlx_loop_hook(tot->mlx, ft_mouse_julia, tot);
 	mlx_mouse_get_pos(tot->mlx_win, &x, &y);
 	tot->crejulia = tot->minre + x * (tot->maxre - tot->minre)
-		/ (tot->size_x - 1);
+		/ (tot->sx - 1);
 	tot->cimjulia = tot->maxim - y * (tot->maxim - tot->minim)
-		/ (tot->size_y - 1);
+		/ (tot->sy - 1);
+	tot->freeze_julia = 1;
 	ft_fractaljulia(tot);
 	return (0);
 }
@@ -54,15 +55,15 @@ void	ft_fractaljulia(t_data *tot)
 	int	x;
 
 	y = 0;
-	while (y < tot->size_y)
+	while (y < tot->sy)
 	{
 		tot->c_im = tot->maxim - y * (tot->maxim - tot->minim)
-			/ (tot->size_y - 1);
+			/ (tot->sy - 1);
 		x = 0;
-		while (x < tot->size_x)
+		while (x < tot->sx)
 		{
 			tot->c_re = tot->minre + x * (tot->maxre - tot->minre)
-				/ (tot->size_x - 1);
+				/ (tot->sx - 1);
 			my_mlx_pixel_put(tot, x, y, ft_calculatejulia(tot));
 			x ++;
 		}
@@ -70,7 +71,6 @@ void	ft_fractaljulia(t_data *tot)
 	}
 	mlx_put_image_to_window(tot->mlx, tot->mlx_win, tot->img, 0, 0);
 	mlx_hook(tot->mlx_win, 4, 1L << 2, ft_mouse_handler, tot);
-	//mlx_hook(tot->mlx_win, 5, 1L << 3, ft_mouse_handler, tot);
 	mlx_hook(tot->mlx_win, 2, 1L << 0, ft_hook, tot);
 	mlx_loop(tot->mlx);
 }

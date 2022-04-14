@@ -6,7 +6,7 @@
 /*   By: msoler-e <msoler-e@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 11:28:17 by msoler-e          #+#    #+#             */
-/*   Updated: 2022/04/14 10:59:20 by msoler-e         ###   ########.fr       */
+/*   Updated: 2022/04/14 15:24:59 by msoler-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int	ft_color_towhite(t_data *tot, int color)
 
 void	ft_blue(t_data *tot)
 {
+	tot->freq = 4;
 	tot->blue = 1;
 	tot->red = 0;
 	tot->green = 0;
@@ -32,6 +33,7 @@ void	ft_blue(t_data *tot)
 
 void	ft_green(t_data *tot)
 {
+	tot->freq = 18;
 	tot->blue = 0;
 	tot->red = 0;
 	tot->green = 1;
@@ -40,13 +42,13 @@ void	ft_green(t_data *tot)
 int	ft_calculate_color_crazy(int n, t_data *tot)
 {
 	int		color;
-	double	frequency;
+	double	freq;
 
 	color = 0;
-	frequency = 0.3;
-	tot->red = sin(frequency * n + 0) * 127 + 128;
-	tot->green = sin(frequency * n + 2) * 127 + 128;
-	tot->blue = sin(frequency * n + 4) * 127 + 128;
+	freq = 0.3;
+	tot->red = sin(freq * n + tot->freq -4) * 127 + 128;
+	tot->green = sin(freq * n + tot->freq) * 127 + 128;
+	tot->blue = sin(freq * n + tot->freq + 10) * 127 + 128;
 	color = ((tot->trans << 24)
 			| (tot->red << 16) | (tot->green << 8) | (tot->blue));
 	return (color);

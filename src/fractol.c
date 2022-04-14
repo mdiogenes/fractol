@@ -6,7 +6,7 @@
 /*   By: msoler-e <msoler-e@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 10:36:56 by msoler-e          #+#    #+#             */
-/*   Updated: 2022/04/14 11:46:22 by msoler-e         ###   ########.fr       */
+/*   Updated: 2022/04/14 15:15:00 by msoler-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/fractol.h"
@@ -34,19 +34,20 @@ void	ft_init_data(t_data *tot)
 	tot->fractal = 1;
 	tot->crejulia = -0.7;
 	tot->cimjulia = 0.27015;
-	tot->size_x = 1920;
-	tot->size_y = 1080;
+	tot->sx = 1920;
+	tot->sy = 1080;
 	tot->red = 1;
+	tot->freq = 0.3;
 	tot->green = 0;
 	tot->blue = 0;
 	tot->maxitera = 50;
-	tot->trans = 5;
+	tot->trans = 0;
 	tot->zoom = 1;
 	tot->minre = -2.0;
 	tot->maxre = 1.0;
 	tot->minim = -1.2;
 	tot->maxim = tot->minim + (tot->maxre - tot->minre)
-		* ((tot->size_x) / (tot->size_y));
+		* ((tot->sx) / (tot->sy));
 }
 
 void	menu(char **argv, t_data *tot)
@@ -84,9 +85,9 @@ int	main(int argc, char **argv)
 
 	ft_init_data(&tot);
 	tot.mlx = mlx_init();
-	tot.mlx_win = mlx_new_window(tot.mlx, tot.size_x,
-			tot.size_y, "fractol");
-	tot.img = mlx_new_image(tot.mlx, tot.size_x, tot.size_y);
+	tot.mlx_win = mlx_new_window(tot.mlx, tot.sx,
+			tot.sy, "fractol");
+	tot.img = mlx_new_image(tot.mlx, tot.sx, tot.sy);
 	tot.addr = mlx_get_data_addr(tot.img, &tot.bits_per_pixel,
 			&tot.line_length, &tot.endian);
 	if (argc != 2)

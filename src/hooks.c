@@ -6,7 +6,7 @@
 /*   By: msoler-e <msoler-e@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 09:48:45 by msoler-e          #+#    #+#             */
-/*   Updated: 2022/04/14 11:43:52 by msoler-e         ###   ########.fr       */
+/*   Updated: 2022/04/14 15:25:23 by msoler-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/fractol.h"
@@ -41,16 +41,19 @@ void	ft_itera(int keycode, t_data *tot)
 		tot->maxitera = tot->maxitera + 10;
 	if (keycode == 78)
 		tot->maxitera = tot->maxitera - 10;
+	if (keycode == 49)
+		tot->freeze_julia = 0;
 }
 
 int	ft_hook(int keycode, t_data *tot)
 {
 	if (keycode == 53)
 		ft_error("\n", 1, tot);
-	if ((keycode == 69) || (keycode == 78))
+	if ((keycode == 69) || (keycode == 78) || (keycode == 49))
 		ft_itera(keycode, tot);
 	if (keycode == 18)
 	{
+		tot->freq = 2;
 		tot->blue = 0;
 		tot->red = 1;
 		tot->green = 0;
@@ -95,28 +98,28 @@ void	ft_loop_zoom(t_data *tot, int mouscode)
 
 int	ft_mouse_handler(int mouscode, int x, int y, t_data *tot)
 {
-	double	c_im;
-	double	c_re;
 	double	centim;
 	double	centre;
 
+	if (mouscode == 1 && tot->freeze_julia == 1)
+		tot->freeze_julia = 3;
 	if (tot->fractal == 2 && mouscode == 1 && tot->freeze_julia == 0)
 		ft_mouse_julia(tot, x, y);
 	if (mouscode != 1)
 	{
-		c_im = tot->maxim - y * (tot->maxim - tot->minim) / (tot->size_y - 1);
-		c_re = tot->minre + x * (tot->maxre - tot->minre) / (tot->size_x - 1);
+		tot->c_im = tot->maxim - y * (tot->maxim - tot->minim) / (tot->sy - 1);
+		tot->c_re = tot->minre + x * (tot->maxre - tot->minre) / (tot->sx - 1);
 		tot->maxre = tot->maxre * tot->zoom;
 		tot->minre = tot->minre * tot->zoom;
 		tot->minim = tot->minim * tot->zoom;
 		tot->maxim = tot->minim + (tot->maxre - tot->minre)
-			* ((tot->size_x) / (tot->size_y));
+			* ((tot->sx) / (tot->sy));
 		centre = (tot->maxre - tot->minre) / 2;
 		centim = (tot->maxim - tot->minim) / 2;
-		tot->minre = c_re - centre;
-		tot->maxre = c_re + centre;
-		tot->maxim = c_im + centim;
-		tot->minim = c_im - centim;
+		tot->minre = tot->c_re - centre;
+		tot->maxre = tot->c_re + centre;
+		tot->maxim = tot->c_im + centim;
+		tot->minim = tot->c_im - centim;
 		ft_loop_zoom(tot, mouscode);
 	}
 	return (0);

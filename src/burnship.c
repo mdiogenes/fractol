@@ -6,7 +6,7 @@
 /*   By: msoler-e <msoler-e@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 09:30:35 by msoler-e          #+#    #+#             */
-/*   Updated: 2022/04/14 11:24:51 by msoler-e         ###   ########.fr       */
+/*   Updated: 2022/04/14 14:51:49 by msoler-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/fractol.h"
@@ -42,15 +42,15 @@ void	ft_fractolburnship(t_data *tot)
 	int	x;
 
 	y = 0;
-	while (y < tot->size_y)
+	while (y < tot->sy)
 	{
 		tot->c_im = tot->maxim - y * (tot->maxim - tot->minim)
-			/ (tot->size_y - 1);
+			/ (tot->sy - 1);
 		x = 0;
-		while (x < tot->size_x)
+		while (x < tot->sx)
 		{
 			tot->c_re = tot->minre + x * (tot->maxre - tot->minre)
-				/ (tot->size_x - 1);
+				/ (tot->sx - 1);
 			my_mlx_pixel_put(tot, x, y, ft_calculateburnship(tot));
 			x ++;
 		}

@@ -6,7 +6,7 @@
 /*   By: msoler-e <msoler-e@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 10:31:18 by msoler-e          #+#    #+#             */
-/*   Updated: 2022/04/14 11:43:00 by msoler-e         ###   ########.fr       */
+/*   Updated: 2022/04/14 15:11:44 by msoler-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FRACTOL_H
@@ -29,14 +29,15 @@ typedef struct s_data{
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
-	int		size_x;
-	int		size_y;
+	int		sx;
+	int		sy;
 	double	c_im;
 	double	c_re;
 	double	minre;
 	double	maxre;
 	double	minim;
 	double	maxim;
+	double	freq;
 	int		maxitera;
 	int		red;
 	int		green;
