@@ -5,7 +5,9 @@ Opcions:
 3.burning ship
 mouse scroll:
 zoom in,out
-click per fixar julia
+click ratoli per fixar julia
+space per desfixar
+
 teclat:
 1,2,3 per canviar colors.
 +,- per aumentar, disminuir iteracions.
